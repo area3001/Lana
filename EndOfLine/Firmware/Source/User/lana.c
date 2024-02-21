@@ -128,6 +128,9 @@ void pinMode(uint8_t pin, uint8_t mode)
         case INPUT_PULLDOWN:
              gpio_pin.GPIO_Mode = GPIO_Mode_IPD;
              break;
+        case INPUT:
+             gpio_pin.GPIO_Mode = GPIO_Mode_IN_FLOATING;
+             break;
         default:
             gpio_pin.GPIO_Mode = GPIO_Mode_IN_FLOATING;
             break;

@@ -1,6 +1,8 @@
 #include "debug.h"
 #include "lana.h"
 
+typedef enum {FALSE = 0, TRUE = 1 } boolean;
+
 static uint32_t Color(uint8_t r, uint8_t g, uint8_t b) {
     return ((uint32_t)r << 16) | ((uint32_t)g << 8) | b;
   }
@@ -40,11 +42,11 @@ uint8_t Blue(uint32_t color)
    }
 
 
-#define RED 30,0,0
-#define GREEN 0,30,0
-#define BLUE 0,0,30
-#define YELLOW 15,15,0
-#define WHITE 10,10,10
+#define RED 90,0,0
+#define GREEN 0,90,0
+#define BLUE 0,0,90
+#define YELLOW 45,45,0
+#define WHITE 30,30,30
 
 uint8_t testShortToVCC(uint8_t pin)
 {
@@ -67,10 +69,11 @@ uint8_t testShortToGND(uint8_t pin)
     return errors;
 }
 
-uint8_t testPair(uint8_t pinA, uint8_t pinB,  uint8_t r1,uint8_t g1,uint8_t b1, uint8_t r2,uint8_t g2,uint8_t b2)
+uint8_t testPair(uint8_t pinA, uint8_t pinB,  uint8_t r1,uint8_t g1,uint8_t b1, uint8_t r2,uint8_t g2,uint8_t b2, boolean test_connection)
 {
     uint8_t errors = 0;
 
+    // Test shorts to VCC
     errors += testShortToVCC(pinA);
     errors += testShortToVCC(pinB);
     if (errors){
@@ -82,9 +85,9 @@ uint8_t testPair(uint8_t pinA, uint8_t pinB,  uint8_t r1,uint8_t g1,uint8_t b1, 
         return errors;
     }
 
+    // Test shorts to GND
     errors += testShortToGND(pinA);
     errors += testShortToGND(pinB);
-
     if (errors){
        SetLed(0, RED);
        SetLed(1, BLUE);
@@ -93,40 +96,45 @@ uint8_t testPair(uint8_t pinA, uint8_t pinB,  uint8_t r1,uint8_t g1,uint8_t b1, 
        Write();
        return errors;
     }
-    // Since we're here both pins are not shorted.
-    // Now make one high then low and read the same state on the other pin
 
-    //pinA = outPP
-    //pinB = in
-    //pinA.high
-    //assert B == high
-    //test all but(A,B, PULLDOWN, == LOW)
-    //pinA.low
-    //assert B == LOW
-    //test all but(A,B, PULLUP, == HIGH)
+    if (test_connection)
+    {
+        pinMode(pinA, INPUT);
+        pinMode(pinB, OUTPUT);
+        Delay_Ms(1);
+        digitalWrite(pinB, LOW);
+        Delay_Ms(1);
+        if (digitalRead(pinA) > 0){
+            errors += 1;
+        }
+        digitalWrite(pinB, HIGH);
+        Delay_Ms(1);
+        if (digitalRead(pinA) == 0){
+            errors += 1;
+        }
+        Delay_Ms(1);
+        digitalWrite(pinB, LOW);
+        pinMode(pinB, INPUT);
+        if (errors){
+            SetLed(0, RED);
+            SetLed(1, YELLOW);
+            SetLed(2, r1,g1,b1);
+            SetLed(3, r2,g2,b2);
+            Write();
+            return errors;
+        }
+    }
 
-       SetLed(0, GREEN);
-       SetLed(1, GREEN);
-       SetLed(2, GREEN);
-       SetLed(3, GREEN);
-       Write();
+
+   SetLed(0, GREEN);
+   SetLed(1, GREEN);
+   SetLed(2, GREEN);
+   SetLed(3, GREEN);
+   Write();
 
     return errors;
 }
 
-uint8_t all_pins[] = {
-    PIN_PD1, PIN_PB5,
-    PIN_PA3, PIN_PA5,
-    PIN_PA4, PIN_PA9,
-    PIN_PA6, PIN_PA7,   /* connected to button to GND */
-    PIN_PA2, PIN_PB4,
-    PIN_PB6, PIN_PB3,
-    PIN_PB7, PIN_PA15,
-    PIN_PA0, PIN_PA14,
-    PIN_PA1, PIN_PA13,
-    PIN_PB0, PIN_PB1};
-
-uint8_t all_pin_len = sizeof(all_pins);
 
 /*
  * Run a animated RGB wheel to show the board is working.
@@ -154,7 +162,7 @@ int main(void)
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     Delay_Init();
-    initNeopixel(); //TODO: change to PinMode(...
+    initNeopixel();
 
     runDefaultAnimation();
 
@@ -166,19 +174,31 @@ int main(void)
 
     Delay_Ms(100);
 
+
     while (1){
-        if(testPair(PIN_PD1, PIN_PB5, RED, RED) ||
-           testPair(PIN_PA3, PIN_PA5, RED, BLUE) ||
-           testPair(PIN_PA4, PIN_PA9, RED, YELLOW) ||
-           testPair(PIN_PA6, PIN_PA7, BLUE, RED) ||
-           testPair(PIN_PA2, PIN_PB4, BLUE, BLUE) ||
-           testPair(PIN_PB6, PIN_PB3, BLUE, YELLOW) ||
-           testPair(PIN_PB7, PIN_PA15, YELLOW, RED) ||
-           testPair(PIN_PA0, PIN_PA14, YELLOW, BLUE) ||
-           testPair(PIN_PA1, PIN_PA13, YELLOW, YELLOW) ||
-           testPair(PIN_PB0, PIN_PB1, YELLOW, WHITE) ||
-           0
-           ) Delay_Ms(1000);
+
+        if(
+           testPair(PIN_PD1, PIN_PB5, RED, RED, TRUE) ||
+           testPair(PIN_PA3, PIN_PA5, RED, BLUE, TRUE) ||
+           testPair(PIN_PA4, PIN_PA9, RED, YELLOW, TRUE) ||
+           testPair(PIN_PA6, PIN_PA7, BLUE, RED, FALSE) ||  //TST
+           testPair(PIN_PA2, PIN_PB4, BLUE, BLUE, TRUE) ||
+           testPair(PIN_PB6, PIN_PB3, BLUE, YELLOW, TRUE) ||
+           testPair(PIN_PB7, PIN_PA15, YELLOW, RED, TRUE) ||
+           testPair(PIN_PA0, PIN_PA14, YELLOW, BLUE, TRUE) ||  //PA14 == SWC
+           testPair(PIN_PA1, PIN_PA13, YELLOW, YELLOW, TRUE) ||  //PA13 == SWD
+           testPair(PIN_PB0, PIN_PB1, YELLOW, WHITE, TRUE)
+           ) Delay_Ms(100);
+        else {
+            while (1) {
+                SetLed(0, GREEN);
+                SetLed(1, GREEN);
+                SetLed(2, GREEN);
+                SetLed(3, GREEN);
+                Write();
+                Delay_Ms(100);
+            }
+        }
 
         Delay_Ms(100);
     }
