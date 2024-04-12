@@ -1,4 +1,8 @@
-# Preparation 
+# LANA Firmware flashing v 1.0
+
+> for latest version of this document visit: https://github.com/area3001/Lana/blob/main/EndOfLine/EOL_flashing_firmware.pdf
+
+## Preparation 
 This needs to be done only one time.
 
 1) Download WCHISPTool_Setup.exe
@@ -9,7 +13,7 @@ https://github.com/area3001/Lana/tree/EndOfLine/EndOfLine/Firmware/Binaries
 
 Note: use LANA_EOL_G8.hex for the 64k version of LANA (CH32V 203 G8U6)
 
-# Flashing
+## Flashing
 1) Start WCHISPTool
 2) Select RiskV MCU's / CH32Vxxx
 3) Set these options
@@ -19,13 +23,16 @@ Note: use LANA_EOL_G8.hex for the 64k version of LANA (CH32V 203 G8U6)
 	4. Object File 1: **Select the hex file you downloaded above**
     5. Enable RRP: This must be off, do not enable.
     6. Perform a soft reset After Download: [v] this must be on
+   
 
 ![WCHISPTOOL Settings](Media/WCHISPTool_settings.png)
 
-## For each LANA Chip
+### For each LANA Chip
 1) press, and HOLD the boot button  
 ![Boot button](Media/Lana_boot_button.png)
 2) insert the usb connector while still holding the boot button
 3) The download record should show Succeed!
-4) The onboard LED starts blinking in a rainbow pattern
+4) The onboard LED starts blinking in a rainbow pattern  
+   Note: if the LED does not start flashing try unplugging the USB and plug it in again.
 
+Repeat the 4 steps above for all boards.

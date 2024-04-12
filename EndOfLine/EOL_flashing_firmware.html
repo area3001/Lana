@@ -13,7 +13,11 @@
 <div class="file" id="user-content-article-EOL_flashing_firmware">
 <div class="Box-body readme blob js-code-block-container p-5 p-xl-6" id="user-content-file-docker-image-pull-md-readme" style="margin-left: 40px; margin-right: 40px; margin-top: 20px; margin-bottom: 20px">
 <article class="markdown-body entry-content container-lg" itemprop="text">
-<div class="markdown-heading"><h1 class="heading-element">Preparation</h1><a aria-label="Permalink: Preparation" class="anchor" href="#user-content-preparation" id="user-content-preparation" name="user-content-preparation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h1 class="heading-element">LANA Firmware flashing v 1.0</h1><a aria-label="Permalink: LANA Firmware flashing v 1.0" class="anchor" href="#user-content-lana-firmware-flashing-v-10" id="user-content-lana-firmware-flashing-v-10" name="user-content-lana-firmware-flashing-v-10"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<blockquote>
+<p>for latest version of this document visit: <a href="https://github.com/area3001/Lana/blob/main/EndOfLine/EOL_flashing_firmware.pdf">https://github.com/area3001/Lana/blob/main/EndOfLine/EOL_flashing_firmware.pdf</a></p>
+</blockquote>
+<div class="markdown-heading"><h2 class="heading-element">Preparation</h2><a aria-label="Permalink: Preparation" class="anchor" href="#user-content-preparation" id="user-content-preparation" name="user-content-preparation"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <p>This needs to be done only one time.</p>
 <ol>
 <li>Download WCHISPTool_Setup.exe
@@ -25,7 +29,7 @@
 </li>
 </ol>
 <p>Note: use LANA_EOL_G8.hex for the 64k version of LANA (CH32V 203 G8U6)</p>
-<div class="markdown-heading"><h1 class="heading-element">Flashing</h1><a aria-label="Permalink: Flashing" class="anchor" href="#user-content-flashing" id="user-content-flashing" name="user-content-flashing"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h2 class="heading-element">Flashing</h2><a aria-label="Permalink: Flashing" class="anchor" href="#user-content-flashing" id="user-content-flashing" name="user-content-flashing"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <ol>
 <li>Start WCHISPTool</li>
 <li>Select RiskV MCU's / CH32Vxxx</li>
@@ -42,15 +46,17 @@
 </li>
 </ol>
 <p><a href="/images/WCHISPTool_settings.png" rel="noopener noreferrer" target="_blank"><img alt="WCHISPTOOL Settings" data-canonical-src="/images/WCHISPTool_settings.png" src="/images/WCHISPTool_settings.png" style="max-width: 100%; max-height: 862px;"/></a></p>
-<div class="markdown-heading"><h2 class="heading-element">For each LANA Chip</h2><a aria-label="Permalink: For each LANA Chip" class="anchor" href="#user-content-for-each-lana-chip" id="user-content-for-each-lana-chip" name="user-content-for-each-lana-chip"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<div class="markdown-heading"><h3 class="heading-element">For each LANA Chip</h3><a aria-label="Permalink: For each LANA Chip" class="anchor" href="#user-content-for-each-lana-chip" id="user-content-for-each-lana-chip" name="user-content-for-each-lana-chip"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
 <ol>
 <li>press, and HOLD the boot button<br/>
 <a href="/images/Lana_boot_button.png" rel="noopener noreferrer" target="_blank"><img alt="Boot button" data-canonical-src="/images/Lana_boot_button.png" src="/images/Lana_boot_button.png" style="max-width: 100%; max-height: 377px;"/></a>
 </li>
 <li>insert the usb connector while still holding the boot button</li>
 <li>The download record should show Succeed!</li>
-<li>The onboard LED starts blinking in a rainbow pattern</li>
+<li>The onboard LED starts blinking in a rainbow pattern<br/>
+Note: if the LED does not start flashing try unplugging the USB and plug it in again.</li>
 </ol>
+<p>Repeat the 4 steps above for all boards.</p>
 </article>
 </div>
 </div>

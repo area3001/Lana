@@ -1,0 +1,96 @@
+<!-- ?xml version='1.0' encoding='UTF-8'? -->
+<link href="/github-markdown-css/github-css.css" rel="stylesheet"/>
+<meta charset="utf-8" content="text/html"/>
+<div class="gist">
+<style class="formula-style">
+        svg.gh-md-to-html-formula {
+            fill: black;
+        }
+    </style>
+<div class="gist-file"> <!-- This is the class that is responsible for the boxing! -->
+<div class="gist-data">
+<div class="js-gist-file-update-container js-task-list-container file-box">
+<div class="file" id="user-content-article-EOL_testing_lana">
+<div class="Box-body readme blob js-code-block-container p-5 p-xl-6" id="user-content-file-docker-image-pull-md-readme" style="margin-left: 40px; margin-right: 40px; margin-top: 20px; margin-bottom: 20px">
+<article class="markdown-body entry-content container-lg" itemprop="text">
+<div class="markdown-heading"><h1 class="heading-element">LANA EOL TEST v 1.0</h1><a aria-label="Permalink: LANA EOL TEST v 1.0" class="anchor" href="#user-content-lana-eol-test-v-10" id="user-content-lana-eol-test-v-10" name="user-content-lana-eol-test-v-10"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<blockquote>
+<p>for latest version of this document visit: <a href="https://github.com/area3001/Lana/blob/main/EndOfLine/EOL_testing_lana.pdf">https://github.com/area3001/Lana/blob/main/EndOfLine/EOL_testing_lana.pdf</a></p>
+</blockquote>
+<div class="markdown-heading"><h1 class="heading-element">How to test</h1><a aria-label="Permalink: How to test" class="anchor" href="#user-content-how-to-test" id="user-content-how-to-test" name="user-content-how-to-test"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<ol>
+<li>put the board in the test fixture like in the picture.<br/>
+<a href="/images/Insert_LANA_.jpeg" rel="noopener noreferrer" target="_blank"><img alt="Insert LANA" data-canonical-src="/images/Insert_LANA_.jpeg" src="/images/Insert_LANA_.jpeg" style="max-width: 100%; max-height: 559px;"/></a>
+</li>
+<li>Put on the cover
+<a href="/images/Cover_LANA_.jpeg" rel="noopener noreferrer" target="_blank"><img alt="Cover LANA" data-canonical-src="/images/Cover_LANA_.jpeg" src="/images/Cover_LANA_.jpeg" style="max-width: 100%; max-height: 552px;"/></a>
+</li>
+<li>Press the cover and the black test button
+<a href="/images/Test_LANA_.jpeg" rel="noopener noreferrer" target="_blank"><img alt="Test LANA" data-canonical-src="/images/Test_LANA_.jpeg" src="/images/Test_LANA_.jpeg" style="max-width: 100%; max-height: 481px;"/></a>
+<ol>
+<li>If all LEDS are green the test was OK</li>
+<li>If leds are not GREEN check the error codes below
+<a href="/images/Error_LANA_.jpeg" rel="noopener noreferrer" target="_blank"><img alt="Error LANA" data-canonical-src="/images/Error_LANA_.jpeg" src="/images/Error_LANA_.jpeg" style="max-width: 100%; max-height: 471px;"/></a>
+In this example we get code YELLOW RED RED. This means the PA3 or PA5 pin is not well connected</li>
+</ol>
+</li>
+</ol>
+<div class="markdown-heading"><h1 class="heading-element">Error codes</h1><a aria-label="Permalink: Error codes" class="anchor" href="#user-content-error-codes" id="user-content-error-codes" name="user-content-error-codes"><span aria-hidden="true" class="octicon octicon-link"></span></a></div>
+<p>Pins are connected and  tested in pairs. We test if pairs are shorted to ground, vcc if their connection to the pad of the PCB works and if there are internal shorts between pins. If all tests for all pairs works you see 3 green LEDS 🟢🟢🟢. If you see any other color then the board has an issue.</p>
+<table>
+<thead>
+<tr>
+<th>LEDS</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><a href="/images/GGG.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/GGG.png" src="/images/GGG.png" style="max-width: 100%; max-height: 22px;"/></a></td>
+<td>ALL Tests OK without error</td>
+</tr>
+<tr>
+<td><a href="/images/RRR.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/RRR.png" src="/images/RRR.png" style="max-width: 100%; max-height: 23px;"/></a></td>
+<td>Short VCC</td>
+</tr>
+<tr>
+<td><a href="/images/RRB.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/RRB.png" src="/images/RRB.png" style="max-width: 100%; max-height: 22px;"/></a></td>
+<td>Short GND</td>
+</tr>
+<tr>
+<td><a href="/images/YRR.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YRR.png" src="/images/YRR.png" style="max-width: 100%; max-height: 22px;"/></a></td>
+<td>(PA3, PA5) Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/YRB.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YRB.png" src="/images/YRB.png" style="max-width: 100%; max-height: 24px;"/></a></td>
+<td>(PA6, PB7)  Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/YRY.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YRY.png" src="/images/YRY.png" style="max-width: 100%; max-height: 23px;"/></a></td>
+<td>(PA2, PB6) Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/YBR.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YBR.png" src="/images/YBR.png" style="max-width: 100%; max-height: 22px;"/></a></td>
+<td>(PB0, PB1) Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/YBB.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YBB.png" src="/images/YBB.png" style="max-width: 100%; max-height: 22px;"/></a></td>
+<td>(PA0, PA14) Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/YBY.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/YBY.png" src="/images/YBY.png" style="max-width: 100%; max-height: 21px;"/></a></td>
+<td>(PA1, PA13) Not connected</td>
+</tr>
+<tr>
+<td><a href="/images/BBB.png" rel="noopener noreferrer" target="_blank"><img alt="" data-canonical-src="/images/BBB.png" src="/images/BBB.png" style="max-width: 100%; max-height: 23px;"/></a></td>
+<td>Shorts between pins</td>
+</tr>
+</tbody>
+</table>
+</article>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>

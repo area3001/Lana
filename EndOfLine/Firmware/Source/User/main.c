@@ -42,12 +42,12 @@ uint8_t Blue(uint32_t color)
    }
 
 
-#define RED 90,0,0
-#define GREEN 0,90,0
-#define BLUE 0,0,90
-#define YELLOW 50,40,0
-#define PURPLE 45,0,45
-#define WHITE 30,30,30
+#define RED 45,0,0
+#define GREEN 0,45,0
+#define BLUE 0,0,45
+#define YELLOW 25,20,0
+#define PURPLE 22,0,23
+#define WHITE 15,15,15
 #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
 
