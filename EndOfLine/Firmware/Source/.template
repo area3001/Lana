@@ -1,6 +1,5 @@
 Mcu Type=CH32V20x
 Address=0x08000000
-Target Path=obj/LANA_EOL.hex
 Erase All=true
 Program=true
 Verify=true
@@ -15,3 +14,4 @@ Description=Website: http://www.wch.cn/products/CH32V203.html?\nROM(byte): 32K, 
 
 PeripheralVersion=1.8
 MCU=CH32V203G6U6
+Target Path=obj/LANA_EOL_G6.hex

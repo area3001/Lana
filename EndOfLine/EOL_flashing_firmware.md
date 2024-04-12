@@ -5,7 +5,7 @@ This needs to be done one time.
 https://www.wch-ic.com/downloads/WCHISPTool_Setup_exe.html
 2) Install wCHISPTool_Setup.exe
 3) Download the LANA EOL Firmware
-https://github.com/area3001/Lana/EndOfLine/EndOfLine/Firmware/bin
+https://github.com/area3001/Lana/tree/EndOfLine/EndOfLine/Firmware
 
 # Flashing
 1) Start WCHISPTool

@@ -45,92 +45,29 @@ uint8_t Blue(uint32_t color)
 #define RED 90,0,0
 #define GREEN 0,90,0
 #define BLUE 0,0,90
-#define YELLOW 45,45,0
+#define YELLOW 50,40,0
+#define PURPLE 45,0,45
 #define WHITE 30,30,30
+#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 
-uint8_t testShortToVCC(uint8_t pin)
-{
-    //PB6 PB7 have external pull-up's they cant be tested for shorts to vcc
-    //PB3 and PA15 are connected to these pins on the test fixture and should also be skipped
-    if (pin == PIN_PB6 || pin == PIN_PB7 || pin == PIN_PA15 || pin == PIN_PB3) return 0;
-    uint8_t errors = 0;
-    pinMode(pin, INPUT_PULLDOWN);
-    if (digitalRead(pin) != 0) errors++;
-    pinMode(pin, INPUT);
-    return errors;
-}
 
-uint8_t testShortToGND(uint8_t pin)
-{
-    uint8_t errors = 0;
-    pinMode(pin, INPUT_PULLUP);
-    if (digitalRead(pin) == 0) errors++;
-    pinMode(pin, INPUT);
-    return errors;
-}
 
-uint8_t testPair(uint8_t pinA, uint8_t pinB,  uint8_t r1,uint8_t g1,uint8_t b1, uint8_t r2,uint8_t g2,uint8_t b2, boolean test_connection)
+uint8_t testPair(uint8_t pinA, uint8_t pinB)
 {
     uint8_t errors = 0;
 
-    // Test shorts to VCC
-    errors += testShortToVCC(pinA);
-    errors += testShortToVCC(pinB);
-    if (errors){
-        SetLed(0, RED);
-        SetLed(1, RED);
-        SetLed(2, r1,g1,b1);
-        SetLed(3, r2,g2,b2);
-        Write();
-        return errors;
-    }
-
-    // Test shorts to GND
-    errors += testShortToGND(pinA);
-    errors += testShortToGND(pinB);
-    if (errors){
-       SetLed(0, RED);
-       SetLed(1, BLUE);
-       SetLed(2, r1,g1,b1);
-       SetLed(3, r2,g2,b2);
-       Write();
-       return errors;
-    }
-
-    if (test_connection)
-    {
-        pinMode(pinA, INPUT);
-        pinMode(pinB, OUTPUT);
-        Delay_Ms(1);
-        digitalWrite(pinB, LOW);
-        Delay_Ms(1);
-        if (digitalRead(pinA) > 0){
-            errors += 1;
-        }
-        digitalWrite(pinB, HIGH);
-        Delay_Ms(1);
-        if (digitalRead(pinA) == 0){
-            errors += 1;
-        }
-        Delay_Ms(1);
-        digitalWrite(pinB, LOW);
-        pinMode(pinB, INPUT);
-        if (errors){
-            SetLed(0, RED);
-            SetLed(1, YELLOW);
-            SetLed(2, r1,g1,b1);
-            SetLed(3, r2,g2,b2);
-            Write();
-            return errors;
-        }
-    }
-
-
-   SetLed(0, GREEN);
-   SetLed(1, GREEN);
-   SetLed(2, GREEN);
-   SetLed(3, GREEN);
-   Write();
+    pinMode(pinA, INPUT);
+    pinMode(pinB, OUTPUT);
+    Delay_Ms(1);
+    digitalWrite(pinB, LOW);
+    Delay_Ms(1);
+    if (digitalRead(pinA) > 0) errors += 1;
+    digitalWrite(pinB, HIGH);
+    Delay_Ms(1);
+    if (digitalRead(pinA) == 0) errors += 1;
+    Delay_Ms(1);
+    digitalWrite(pinB, LOW);
+    pinMode(pinB, INPUT);
 
     return errors;
 }
@@ -158,48 +95,167 @@ void runDefaultAnimation()
     }
 }
 
-int main(void)
+uint8_t all_pins[] = {
+        PIN_PA3, PIN_PA5, PIN_PA6, PIN_PA7, PIN_PA2, PIN_PB6, PIN_PB7, PIN_PA0, PIN_PA1,
+        PIN_PB0, PIN_PB1,PIN_PA4, PIN_PB5, PIN_PB4, PIN_PB3, PIN_PA15, PIN_PA9, /*PIN_PD0,*/
+        PIN_PD1, PIN_PA14, PIN_PA13}; //PD0&1 are on OSC PIN; PD0 == NEOPIXEL
+
+uint8_t pins[] = {PIN_PA3, PIN_PA5, PIN_PA6, PIN_PA7,
+                  PIN_PA2, PIN_PB6, PIN_PB7, PIN_PA0, PIN_PA1, PIN_PB0, PIN_PB1};  //PB6&PB7 Active Pullup
+uint8_t smd_pins[] = {PIN_PA4, PIN_PB5, PIN_PB4, PIN_PB3, PIN_PA15, PIN_PA9, /*PIN_PD0,*/ PIN_PD1 //PD0&1 are on OSC PIN; PD0 == NEOPIXEL
+                      /*,PIN_PA14, PIN_PA13*/ }; //These are SWDIO & SWCLK, use with care
+
+uint8_t vcc_short_test_pins[] = {PIN_PA3, PIN_PA5, PIN_PA7, PIN_PA0,
+                                 PIN_PA1, PIN_PB0, PIN_PB1, PIN_PA4, PIN_PB5, PIN_PB4,
+                                 PIN_PB3, PIN_PA15, PIN_PA9, PIN_PD1, PIN_PA14, PIN_PA13};  //REMOVED PD0, PB6+PA2,  PB7PA6
+
+uint8_t gnd_short_test_pins[] = {PIN_PA3, PIN_PA5, PIN_PA0, PIN_PB6, PIN_PA2, PIN_PB7, PIN_PA6,
+                                 PIN_PA1, PIN_PB0, PIN_PB1, PIN_PA4, PIN_PB5, PIN_PB4,
+                                 PIN_PB3, PIN_PA15, PIN_PA9, PIN_PD1, PIN_PA14, PIN_PA13};  //REMOVED PD0, PA7 (GDN via Button)
+
+void all_pins_output()
+{
+    for (int i = 0; i < ARRAY_SIZE(all_pins); i++) pinMode(all_pins[i], OUTPUT);
+}
+
+void all_pins_input_floating()
+{
+    for (int i = 0; i < ARRAY_SIZE(all_pins); i++) pinMode(all_pins[i], INPUT);
+}
+
+void all_pins_active_low()
+{
+    all_pins_output();
+    for (int i = 0; i < ARRAY_SIZE(all_pins); i++) digitalWrite(all_pins[i], LOW);
+}
+
+void ok(void)
+{
+    for (uint8_t i=0;i<4;i++)
+     {
+        SetLed(i, GREEN);
+     }
+     Write();
+     Delay_Ms(500);
+}
+
+void error(uint8_t r1, uint8_t g1, uint8_t b1, uint8_t r2, uint8_t g2, uint8_t b2, uint8_t r3, uint8_t g3, uint8_t b3){
+    SetLed(0, RED);
+    SetLed(1, r1, g1, b1);
+    SetLed(2, r2, g2, b2);
+    SetLed(3, r3, g3, b3);
+    Write();
+    Delay_Ms(500);
+}
+
+void setup()
 {
     NVIC_PriorityGroupConfig(NVIC_PriorityGroup_2);
     Delay_Init();
     initNeopixel();
+}
 
-    runDefaultAnimation();
+int main(void)
+{
+    setup();
 
+    runDefaultAnimation(); //until stopped by pressing the test button
+
+    // clear all LEDS
     for (uint8_t i=0;i<14;i++)
     {
        SetLed(i, 0,0,0);
     }
     Write();
 
-    Delay_Ms(100);
+    Delay_Ms(500);
 
+    //run tests indefinitely
+    while (1)
+    {
+        int errors = 0;
 
-    while (1){
+        all_pins_input_floating();
 
-        if(
-           testPair(PIN_PD1, PIN_PB5, RED, RED, TRUE) ||
-           testPair(PIN_PA3, PIN_PA5, RED, BLUE, TRUE) ||
-           testPair(PIN_PA4, PIN_PA9, RED, YELLOW, TRUE) ||
-           testPair(PIN_PA6, PIN_PA7, BLUE, RED, FALSE) ||  //TST
-           testPair(PIN_PA2, PIN_PB4, BLUE, BLUE, TRUE) ||
-           testPair(PIN_PB6, PIN_PB3, BLUE, YELLOW, TRUE) ||
-           testPair(PIN_PB7, PIN_PA15, YELLOW, RED, TRUE) ||
-           testPair(PIN_PA0, PIN_PA14, YELLOW, BLUE, TRUE) ||  //PA14 == SWC
-           testPair(PIN_PA1, PIN_PA13, YELLOW, YELLOW, TRUE) ||  //PA13 == SWD
-           testPair(PIN_PB0, PIN_PB1, YELLOW, WHITE, TRUE)
-           ) Delay_Ms(100);
-        else {
-            while (1) {
-                SetLed(0, GREEN);
-                SetLed(1, GREEN);
-                SetLed(2, GREEN);
-                SetLed(3, GREEN);
-                Write();
-                Delay_Ms(100);
+        //test for VCC shorts
+        for (int i = 0; i < ARRAY_SIZE(vcc_short_test_pins); i++){
+            pinMode(vcc_short_test_pins[i], INPUT_PULLDOWN);
+            if (digitalRead(vcc_short_test_pins[i]) == 1) {
+                error(RED, RED, RED);
+                errors += 1;
+            }
+            pinMode(vcc_short_test_pins[i], INPUT);
+        }
+
+        //test for GND shorts
+        if (errors == 0) {
+            for (int i = 0; i < ARRAY_SIZE(gnd_short_test_pins); i++){
+              pinMode(gnd_short_test_pins[i], INPUT_PULLUP);
+              if (digitalRead(gnd_short_test_pins[i]) == 0) {
+                  error(RED, RED, BLUE);
+                  errors += 1;
+              }
+              pinMode(gnd_short_test_pins[i], INPUT);
             }
         }
 
-        Delay_Ms(100);
+
+        if (errors == 0 && testPair(PIN_PA3, PIN_PA5)){
+            error(YELLOW, RED, RED);
+            errors += 1;
+        }
+
+        if (errors == 0 && testPair(PIN_PA6, PIN_PB7)){
+            error(YELLOW, RED, BLUE);
+            errors += 1;
+        }
+
+        if (errors == 0 && testPair(PIN_PA2, PIN_PB6)){
+            error(YELLOW, RED, YELLOW);
+            errors += 1;
+        }
+
+        if (errors == 0 && testPair(PIN_PB0, PIN_PB1)){
+            error(YELLOW, BLUE, RED);
+            errors += 1;
+        }
+
+        if (errors == 0 && testPair(PIN_PA0, PIN_PA14)){
+            error(YELLOW, BLUE, BLUE);
+            errors += 1;
+        }
+
+        if (errors == 0 && testPair(PIN_PA1, PIN_PA13)){
+            error(YELLOW, BLUE, YELLOW);
+            errors += 1;
+        }
+
+        //test for smd pins that are shorted to other pins
+        if (errors == 0)
+        {
+            for (int i = 0; i < ARRAY_SIZE(smd_pins); i++)
+            {
+                all_pins_active_low();
+                pinMode(smd_pins[i], INPUT_PULLUP);
+                if (digitalRead(smd_pins[i]) == LOW)
+                {
+                    errors += 1;
+                    error(BLUE, BLUE, BLUE);
+                }
+            }
+        }
+
+        //test for trough hole pins that are shorted to other pins
+        if (errors == 0)
+        {
+            all_pins_active_low();
+            pinMode(PIN_PA3, INPUT_PULLUP);
+            pinMode(PIN_PA5, INPUT_PULLUP);
+
+        }
+
+        if (errors == 0) {
+            ok();
+        }
     }
 }
