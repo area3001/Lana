@@ -1,2 +1,2 @@
-# Lana
-Documentation and Firmware for the LANA RISC-V dev board.
+# LANA
+Documentation and Firmware for the [LANA](https://github.com/phyx-be/LANA_TNY) RISC-V dev board.
