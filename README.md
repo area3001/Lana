@@ -1,2 +1,2 @@
 # Lana
-Documentation and Firmware for the Lava risk-V dev board.
+Documentation and Firmware for the LANA RISC-V dev board.
